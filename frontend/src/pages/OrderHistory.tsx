@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Package,
@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronUp,
   Clock,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,102 +15,8 @@ import { Separator } from '@/components/ui/separator';
 import EmptyState from '@/components/common/EmptyState';
 import { useCartStore } from '@/store/cartStore';
 import { formatPrice, formatDate, canCancelOrder } from '@/utils';
+import { orderService } from '@/services/orderService';
 import type { Order, OrderStatus } from '@/types';
-import { mockBooks } from '@/utils/mockData';
-
-// ─── Mock orders ──────────────────────────────────────────────────────────────
-const now = new Date();
-const mockOrders: Order[] = [
-  {
-    id: 'ord-001',
-    status: 'delivered',
-    items: [
-      { id: 'oi-1', book: mockBooks[0], quantity: 1, unitPrice: 399 },
-      { id: 'oi-2', book: mockBooks[2], quantity: 2, unitPrice: 1104 },
-    ],
-    address: {
-      id: 'addr-1',
-      label: 'Home',
-      street: '42 MG Road',
-      city: 'Bengaluru',
-      state: 'Karnataka',
-      pincode: '560001',
-      isDefault: true,
-    },
-    subtotal: 2607,
-    discount: 0,
-    giftPointsUsed: 0,
-    total: 2607,
-    payment: {
-      id: 'pay-1',
-      method: 'card',
-      status: 'success',
-      transactionRef: 'TXN123456',
-      amount: 2607,
-      paidAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    createdAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'ord-002',
-    status: 'confirmed',
-    items: [
-      { id: 'oi-3', book: mockBooks[5], quantity: 1, unitPrice: 545 },
-    ],
-    address: {
-      id: 'addr-1',
-      label: 'Home',
-      street: '42 MG Road',
-      city: 'Bengaluru',
-      state: 'Karnataka',
-      pincode: '560001',
-      isDefault: true,
-    },
-    subtotal: 545,
-    discount: 0,
-    giftPointsUsed: 50,
-    total: 495,
-    payment: {
-      id: 'pay-2',
-      method: 'upi',
-      status: 'success',
-      transactionRef: 'UPI789012',
-      amount: 495,
-      paidAt: new Date(now.getTime() - 20 * 60 * 60 * 1000).toISOString(),
-    },
-    createdAt: new Date(now.getTime() - 20 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(now.getTime() - 20 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'ord-003',
-    status: 'cancelled',
-    items: [
-      { id: 'oi-4', book: mockBooks[3], quantity: 1, unitPrice: 359 },
-    ],
-    address: {
-      id: 'addr-1',
-      label: 'Home',
-      street: '42 MG Road',
-      city: 'Bengaluru',
-      state: 'Karnataka',
-      pincode: '560001',
-      isDefault: true,
-    },
-    subtotal: 359,
-    discount: 0,
-    giftPointsUsed: 0,
-    total: 359,
-    payment: {
-      id: 'pay-3',
-      method: 'cod',
-      status: 'pending',
-      amount: 359,
-    },
-    createdAt: new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(now.getTime() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
 
 // ─── Status badge ──────────────────────────────────────────────────────────────
 const statusConfig: Record<OrderStatus, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
@@ -255,13 +162,42 @@ function OrderCard({ order, onCancel }: { order: Order; onCancel: (id: string) =
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 export default function OrderHistory() {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const handleCancel = (orderId: string) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: 'cancelled' } : o))
-    );
+  useEffect(() => {
+    orderService.getOrders()
+      .then(setOrders)
+      .catch(() => setError('Failed to load orders. Please try again.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleCancel = async (orderId: string) => {
+    try {
+      const updated = await orderService.cancelOrder(orderId);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      alert(msg ?? 'Could not cancel order.');
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="container py-16 flex justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8">
+        <p className="text-destructive text-sm">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8">

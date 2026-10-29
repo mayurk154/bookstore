@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/authStore';
-import type { User } from '@/types';
+import { authService } from '@/services/authService';
 
 const registerSchema = z
   .object({
@@ -33,22 +33,6 @@ const registerSchema = z
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
-async function mockRegister(data: RegisterForm): Promise<{ user: User; token: string }> {
-  await new Promise((r) => setTimeout(r, 1000));
-  return {
-    token: 'mock-jwt-token-' + Date.now(),
-    user: {
-      id: 'user-' + Date.now(),
-      email: data.email,
-      name: data.name,
-      phone: data.phone,
-      role: 'customer',
-      giftPoints: 0,
-      createdAt: new Date().toISOString(),
-    },
-  };
-}
-
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -66,11 +50,17 @@ export default function Register() {
   const onSubmit = async (data: RegisterForm) => {
     setServerError('');
     try {
-      const { user, token } = await mockRegister(data);
+      const { user, token } = await authService.register({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone || undefined,
+      });
       setAuth(user, token);
       navigate('/', { replace: true });
-    } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setServerError(msg ?? (err instanceof Error ? err.message : 'Registration failed. Please try again.'));
     }
   };
 

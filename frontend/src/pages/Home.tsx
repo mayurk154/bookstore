@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Truck, Shield, Gift, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import BookGrid from '@/components/books/BookGrid';
-import { mockBooks, mockCategories } from '@/utils/mockData';
+import { bookService } from '@/services/bookService';
+import { mockCategories } from '@/utils/mockData';
+import type { Book } from '@/types';
 
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 function Hero() {
@@ -69,23 +71,15 @@ function Hero() {
             </div>
           </div>
 
-          {/* Featured cover grid */}
+          {/* Featured cover grid — category tiles */}
           <div className="hidden md:grid grid-cols-3 gap-3 rotate-2">
-            {mockBooks.slice(0, 6).map((book, i) => (
+            {mockCategories.slice(0, 6).map((cat, i) => (
               <Link
-                key={book.id}
-                to={`/books/${book.id}`}
-                className={`rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow ${i === 1 || i === 4 ? '-mt-4' : ''}`}
+                key={cat.id}
+                to={`/catalogue/${cat.slug}`}
+                className={`rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow ${i === 1 || i === 4 ? '-mt-4' : ''} bg-primary/10 aspect-[3/4] flex items-center justify-center`}
               >
-                <img
-                  src={book.coverUrl}
-                  alt={book.title}
-                  className="w-full aspect-[3/4] object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src =
-                      `https://placehold.co/120x160/e5e7eb/94a3b8?text=${encodeURIComponent(book.title.slice(0, 6))}`;
-                  }}
-                />
+                <span className="text-4xl">{['📚','📖','🔬','💻','🏛️','🌱'][i]}</span>
               </Link>
             ))}
           </div>
@@ -168,6 +162,16 @@ function CategoryGrid() {
 
 // ─── Featured Books ─────────────────────────────────────────────────────────────
 function FeaturedBooks() {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    bookService.getFeaturedBooks()
+      .then(setBooks)
+      .catch(() => {/* silently fall back to empty */})
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <section className="container py-12">
       <div className="flex items-center justify-between mb-6">
@@ -181,14 +185,22 @@ function FeaturedBooks() {
           </Link>
         </Button>
       </div>
-      <BookGrid books={mockBooks} columns={4} />
+      <BookGrid books={books} columns={4} loading={loading} />
     </section>
   );
 }
 
 // ─── Best Sellers ──────────────────────────────────────────────────────────────
 function BestSellers() {
-  const topBooks = [...mockBooks].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 4);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    bookService.getBooks({ sort: 'bestseller', limit: 4 })
+      .then((res) => setBooks(res.data))
+      .catch(() => {/* silently fall back to empty */})
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <section className="bg-muted/30 py-12">
@@ -204,7 +216,7 @@ function BestSellers() {
             </Link>
           </Button>
         </div>
-        <BookGrid books={topBooks} columns={4} />
+        <BookGrid books={books} columns={4} loading={loading} />
       </div>
     </section>
   );

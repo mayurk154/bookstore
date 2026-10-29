@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import type { Book } from '@/types';
-import { formatPrice, discountedPrice, truncate } from '@/utils';
+import { formatPrice, discountedPrice } from '@/utils';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 
 interface BookCardProps {
   book: Book;

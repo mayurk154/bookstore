@@ -37,11 +37,12 @@ const publishers = [
 ];
 
 const books = [
+  // ── Fiction ────────────────────────────────────────────────────────────────
   {
     id: 'book-1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald',
     publisher: publishers[0], price: 499, discountPct: 20,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8226880-L.jpg',
-    description: 'A story of the Jazz Age told through Nick Carraway, who is fascinated by his neighbour Jay Gatsby.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg',
+    description: 'A story of the Jazz Age told through Nick Carraway, who is fascinated by his neighbour Jay Gatsby and his obsession with the beautiful former debutante Daisy Buchanan.',
     isbn: '9780743273565', pages: 180, language: 'English',
     rating: 4.2, reviewCount: 2841, stock: 15,
     categories: [categories[0]], isFeatured: true,
@@ -49,8 +50,8 @@ const books = [
   {
     id: 'book-2', title: 'Sapiens: A Brief History of Humankind', author: 'Yuval Noah Harari',
     publisher: publishers[1], price: 799, discountPct: 25,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8739161-L.jpg',
-    description: 'A bold survey of human history, from the Stone Age to the present.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',
+    description: 'A bold survey of human history, from the Stone Age to the present, asking why Homo sapiens has come to dominate the earth.',
     isbn: '9780062316097', pages: 443, language: 'English',
     rating: 4.5, reviewCount: 5102, stock: 8,
     categories: [categories[1], categories[4]], isFeatured: true,
@@ -58,8 +59,8 @@ const books = [
   {
     id: 'book-3', title: 'Clean Code', author: 'Robert C. Martin',
     publisher: publishers[2], price: 1299, discountPct: 15,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8091016-L.jpg',
-    description: 'A handbook of agile software craftsmanship.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
+    description: 'A handbook of agile software craftsmanship. Even bad code can function, but if it isn\'t clean, it can bring a development organisation to its knees.',
     isbn: '9780132350884', pages: 431, language: 'English',
     rating: 4.7, reviewCount: 3988, stock: 12,
     categories: [categories[3]], isFeatured: true,
@@ -67,8 +68,8 @@ const books = [
   {
     id: 'book-4', title: 'To Kill a Mockingbird', author: 'Harper Lee',
     publisher: publishers[0], price: 399, discountPct: 10,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8228691-L.jpg',
-    description: 'Set in the American South during the 1930s, the novel deals with serious issues of rape and racial inequality.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780061743528-L.jpg',
+    description: 'Set in the American South during the 1930s, the novel deals with serious issues of rape and racial inequality while maintaining the perspective of a child.',
     isbn: '9780061743528', pages: 281, language: 'English',
     rating: 4.6, reviewCount: 4512, stock: 20,
     categories: [categories[0]], isFeatured: false,
@@ -76,8 +77,8 @@ const books = [
   {
     id: 'book-5', title: 'A Brief History of Time', author: 'Stephen Hawking',
     publisher: publishers[3], price: 599, discountPct: 18,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8739179-L.jpg',
-    description: 'Exploring the origins of the universe, the nature of time, and the ultimate fate of the cosmos.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780553380163-L.jpg',
+    description: 'One of the great popular science books ever written — exploring the origins of the universe, the nature of time, and the ultimate fate of the cosmos.',
     isbn: '9780553380163', pages: 212, language: 'English',
     rating: 4.4, reviewCount: 6720, stock: 5,
     categories: [categories[2]], isFeatured: true,
@@ -85,7 +86,7 @@ const books = [
   {
     id: 'book-6', title: 'Atomic Habits', author: 'James Clear',
     publisher: publishers[1], price: 699, discountPct: 22,
-    coverUrl: 'https://covers.openlibrary.org/b/id/10527843-L.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
     description: 'How to build good habits, break bad ones, and make small changes that deliver remarkable results.',
     isbn: '9780735211292', pages: 320, language: 'English',
     rating: 4.8, reviewCount: 9201, stock: 30,
@@ -94,8 +95,8 @@ const books = [
   {
     id: 'book-7', title: 'The Pragmatic Programmer', author: 'David Thomas & Andrew Hunt',
     publisher: publishers[2], price: 1199, discountPct: 20,
-    coverUrl: 'https://covers.openlibrary.org/b/id/8091013-L.jpg',
-    description: 'Examines the core process of software development.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780135957059-L.jpg',
+    description: 'Examines the core process of software development and includes many valuable suggestions that help programmers work more effectively.',
     isbn: '9780135957059', pages: 352, language: 'English',
     rating: 4.6, reviewCount: 2987, stock: 9,
     categories: [categories[3]], isFeatured: false,
@@ -103,11 +104,315 @@ const books = [
   {
     id: 'book-8', title: 'Steve Jobs', author: 'Walter Isaacson',
     publisher: publishers[2], price: 899, discountPct: 30,
-    coverUrl: 'https://covers.openlibrary.org/b/id/7903380-L.jpg',
-    description: 'The exclusive biography of Steve Jobs based on more than forty interviews.',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781451648539-L.jpg',
+    description: 'The exclusive biography of Steve Jobs, based on more than forty interviews conducted over two years.',
     isbn: '9781451648539', pages: 630, language: 'English',
     rating: 4.3, reviewCount: 7841, stock: 14,
     categories: [categories[6]], isFeatured: false,
+  },
+
+  // ── Fiction (continued) ───────────────────────────────────────────────────
+  {
+    id: 'book-9', title: '1984', author: 'George Orwell',
+    publisher: publishers[0], price: 349, discountPct: 12,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg',
+    description: 'A dystopian novel set in a totalitarian society ruled by Big Brother, where individual thought is a crime and the past is constantly rewritten.',
+    isbn: '9780451524935', pages: 328, language: 'English',
+    rating: 4.7, reviewCount: 11230, stock: 25,
+    categories: [categories[0]], isFeatured: true,
+  },
+  {
+    id: 'book-10', title: 'The Alchemist', author: 'Paulo Coelho',
+    publisher: publishers[1], price: 399, discountPct: 15,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg',
+    description: 'A philosophical novel about a young Andalusian shepherd who dreams of finding a treasure near the Egyptian pyramids and sets off on a journey of self-discovery.',
+    isbn: '9780062315007', pages: 208, language: 'English',
+    rating: 4.5, reviewCount: 8430, stock: 18,
+    categories: [categories[0]], isFeatured: false,
+  },
+  {
+    id: 'book-11', title: 'Pride and Prejudice', author: 'Jane Austen',
+    publisher: publishers[0], price: 299, discountPct: 0,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg',
+    description: 'A romantic novel of manners that follows the Bennet family and the headstrong Elizabeth\'s relationship with the proud Mr. Darcy.',
+    isbn: '9780141439518', pages: 432, language: 'English',
+    rating: 4.6, reviewCount: 7621, stock: 22,
+    categories: [categories[0]], isFeatured: false,
+  },
+  {
+    id: 'book-12', title: 'The Catcher in the Rye', author: 'J. D. Salinger',
+    publisher: publishers[2], price: 349, discountPct: 8,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780316769174-L.jpg',
+    description: 'A coming-of-age story narrated by Holden Caulfield, a teenager from New York City who is expelled from prep school and has a brief breakdown.',
+    isbn: '9780316769174', pages: 277, language: 'English',
+    rating: 4.1, reviewCount: 5901, stock: 16,
+    categories: [categories[0]], isFeatured: false,
+  },
+
+  // ── Non-Fiction ───────────────────────────────────────────────────────────
+  {
+    id: 'book-13', title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman',
+    publisher: publishers[0], price: 849, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg',
+    description: 'Kahneman reveals the two systems that drive the way we think: the fast, intuitive System 1 and the slower, more deliberate System 2.',
+    isbn: '9780374533557', pages: 499, language: 'English',
+    rating: 4.6, reviewCount: 7102, stock: 14,
+    categories: [categories[1]], isFeatured: true,
+  },
+  {
+    id: 'book-14', title: 'Educated', author: 'Tara Westover',
+    publisher: publishers[0], price: 599, discountPct: 18,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780399590504-L.jpg',
+    description: 'A memoir about a young woman who, kept out of school, leaves her survivalist family and eventually earns a PhD from Cambridge University.',
+    isbn: '9780399590504', pages: 352, language: 'English',
+    rating: 4.7, reviewCount: 8920, stock: 11,
+    categories: [categories[1], categories[6]], isFeatured: false,
+  },
+  {
+    id: 'book-15', title: 'Becoming', author: 'Michelle Obama',
+    publisher: publishers[1], price: 699, discountPct: 25,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781524763138-L.jpg',
+    description: 'In her memoir, former First Lady Michelle Obama invites readers into her world, chronicling her experiences from her childhood on the South Side of Chicago.',
+    isbn: '9781524763138', pages: 448, language: 'English',
+    rating: 4.8, reviewCount: 12450, stock: 20,
+    categories: [categories[1], categories[6]], isFeatured: true,
+  },
+  {
+    id: 'book-16', title: 'The Body Keeps the Score', author: 'Bessel van der Kolk',
+    publisher: publishers[3], price: 749, discountPct: 15,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780670785933-L.jpg',
+    description: 'A pioneering researcher transforms our understanding of traumatic stress, revealing how it literally reshapes both brain and body.',
+    isbn: '9780670785933', pages: 464, language: 'English',
+    rating: 4.7, reviewCount: 6310, stock: 13,
+    categories: [categories[1]], isFeatured: false,
+  },
+
+  // ── Science ───────────────────────────────────────────────────────────────
+  {
+    id: 'book-17', title: 'The Gene: An Intimate History', author: 'Siddhartha Mukherjee',
+    publisher: publishers[2], price: 899, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781476733500-L.jpg',
+    description: 'An epic, moving history of the gene and a response to the defining question of our era: what does it mean to be human?',
+    isbn: '9781476733500', pages: 608, language: 'English',
+    rating: 4.5, reviewCount: 3870, stock: 10,
+    categories: [categories[2]], isFeatured: false,
+  },
+  {
+    id: 'book-18', title: 'Astrophysics for People in a Hurry', author: 'Neil deGrasse Tyson',
+    publisher: publishers[3], price: 499, discountPct: 10,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780393609394-L.jpg',
+    description: 'Over a series of brief, witty, and well-illustrated essays, Tyson introduces the fundamental concepts of astrophysics.',
+    isbn: '9780393609394', pages: 224, language: 'English',
+    rating: 4.4, reviewCount: 5540, stock: 18,
+    categories: [categories[2]], isFeatured: true,
+  },
+  {
+    id: 'book-19', title: 'The Selfish Gene', author: 'Richard Dawkins',
+    publisher: publishers[4], price: 649, discountPct: 12,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780198788607-L.jpg',
+    description: 'Dawkins\' brilliant analysis of evolution at the level of the gene, showing how self-interest is built into our very nature.',
+    isbn: '9780198788607', pages: 360, language: 'English',
+    rating: 4.5, reviewCount: 4210, stock: 9,
+    categories: [categories[2]], isFeatured: false,
+  },
+
+  // ── Technology ────────────────────────────────────────────────────────────
+  {
+    id: 'book-20', title: 'The Design of Everyday Things', author: 'Don Norman',
+    publisher: publishers[1], price: 999, discountPct: 18,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780465050659-L.jpg',
+    description: 'A powerful primer on how and why some products satisfy customers while others only frustrate them.',
+    isbn: '9780465050659', pages: 368, language: 'English',
+    rating: 4.5, reviewCount: 4180, stock: 12,
+    categories: [categories[3]], isFeatured: false,
+  },
+  {
+    id: 'book-21', title: 'Deep Work', author: 'Cal Newport',
+    publisher: publishers[2], price: 749, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg',
+    description: 'Rules for focused success in a distracted world. Newport argues that the ability to perform deep work is becoming increasingly rare and increasingly valuable.',
+    isbn: '9781455586691', pages: 296, language: 'English',
+    rating: 4.6, reviewCount: 5870, stock: 17,
+    categories: [categories[3], categories[5]], isFeatured: true,
+  },
+  {
+    id: 'book-22', title: 'You Don\'t Know JS: Scope & Closures', author: 'Kyle Simpson',
+    publisher: publishers[4], price: 849, discountPct: 15,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781449335588-L.jpg',
+    description: 'A deep dive into the core mechanisms of the JavaScript language. Part of the You Don\'t Know JS series.',
+    isbn: '9781449335588', pages: 98, language: 'English',
+    rating: 4.6, reviewCount: 2140, stock: 14,
+    categories: [categories[3]], isFeatured: false,
+  },
+  {
+    id: 'book-23', title: 'Designing Data-Intensive Applications', author: 'Martin Kleppmann',
+    publisher: publishers[4], price: 1499, discountPct: 22,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg',
+    description: 'The big ideas behind reliable, scalable, and maintainable systems — a must-read for backend engineers.',
+    isbn: '9781449373320', pages: 616, language: 'English',
+    rating: 4.9, reviewCount: 3760, stock: 8,
+    categories: [categories[3]], isFeatured: true,
+  },
+
+  // ── History ───────────────────────────────────────────────────────────────
+  {
+    id: 'book-24', title: 'Guns, Germs, and Steel', author: 'Jared Diamond',
+    publisher: publishers[3], price: 749, discountPct: 15,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780393354324-L.jpg',
+    description: 'A fascinating account of why Western civilisation came to dominate the world, and what the future might hold for the world\'s peoples.',
+    isbn: '9780393354324', pages: 480, language: 'English',
+    rating: 4.4, reviewCount: 5980, stock: 12,
+    categories: [categories[4]], isFeatured: false,
+  },
+  {
+    id: 'book-25', title: 'The Diary of a Young Girl', author: 'Anne Frank',
+    publisher: publishers[0], price: 349, discountPct: 8,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780553296983-L.jpg',
+    description: 'The diary written by Anne Frank while she and her family were in hiding from 1942 to 1944 in German-occupied Netherlands.',
+    isbn: '9780553296983', pages: 283, language: 'English',
+    rating: 4.8, reviewCount: 9900, stock: 22,
+    categories: [categories[4], categories[6]], isFeatured: false,
+  },
+  {
+    id: 'book-26', title: 'A People\'s History of the United States', author: 'Howard Zinn',
+    publisher: publishers[1], price: 899, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780062397348-L.jpg',
+    description: 'Tells American history from the perspective of ordinary people rather than political and military leaders.',
+    isbn: '9780062397348', pages: 784, language: 'English',
+    rating: 4.6, reviewCount: 4310, stock: 10,
+    categories: [categories[4]], isFeatured: false,
+  },
+
+  // ── Self-Help ─────────────────────────────────────────────────────────────
+  {
+    id: 'book-27', title: 'The 7 Habits of Highly Effective People', author: 'Stephen R. Covey',
+    publisher: publishers[2], price: 699, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781982137274-L.jpg',
+    description: 'A business and self-help book presenting an approach to being effective in achieving goals by aligning yourself to principles.',
+    isbn: '9781982137274', pages: 372, language: 'English',
+    rating: 4.5, reviewCount: 8210, stock: 25,
+    categories: [categories[5]], isFeatured: false,
+  },
+  {
+    id: 'book-28', title: 'Man\'s Search for Meaning', author: 'Viktor E. Frankl',
+    publisher: publishers[0], price: 399, discountPct: 10,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780807014271-L.jpg',
+    description: 'A Holocaust memoir and a work of psychology that introduces logotherapy — a form of psychotherapy based on finding meaning in life.',
+    isbn: '9780807014271', pages: 200, language: 'English',
+    rating: 4.8, reviewCount: 10540, stock: 20,
+    categories: [categories[5]], isFeatured: true,
+  },
+  {
+    id: 'book-29', title: 'The Power of Now', author: 'Eckhart Tolle',
+    publisher: publishers[1], price: 499, discountPct: 15,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781577314806-L.jpg',
+    description: 'A guide to spiritual enlightenment that teaches the importance of living in the present moment and detaching from your mind.',
+    isbn: '9781577314806', pages: 236, language: 'English',
+    rating: 4.4, reviewCount: 6870, stock: 15,
+    categories: [categories[5]], isFeatured: false,
+  },
+
+  // ── Biography ─────────────────────────────────────────────────────────────
+  {
+    id: 'book-30', title: 'Leonardo da Vinci', author: 'Walter Isaacson',
+    publisher: publishers[2], price: 999, discountPct: 25,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781501139154-L.jpg',
+    description: 'A biography of Leonardo da Vinci that reveals a man, like Einstein, whose genius bridged art and science, humanity and universe.',
+    isbn: '9781501139154', pages: 624, language: 'English',
+    rating: 4.6, reviewCount: 4920, stock: 11,
+    categories: [categories[6]], isFeatured: false,
+  },
+  {
+    id: 'book-31', title: 'Long Walk to Freedom', author: 'Nelson Mandela',
+    publisher: publishers[0], price: 799, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780316548182-L.jpg',
+    description: 'The autobiography of Nelson Mandela — from his childhood in rural South Africa to his years in prison and his eventual presidency.',
+    isbn: '9780316548182', pages: 656, language: 'English',
+    rating: 4.7, reviewCount: 5610, stock: 14,
+    categories: [categories[6], categories[4]], isFeatured: true,
+  },
+  {
+    id: 'book-32', title: 'The Story of My Experiments with Truth', author: 'Mahatma Gandhi',
+    publisher: publishers[4], price: 349, discountPct: 0,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780807059098-L.jpg',
+    description: 'Gandhi\'s autobiography covering his life from early childhood to 1921, including his experiments with truth, non-violence, and brahmacharya.',
+    isbn: '9780807059098', pages: 480, language: 'English',
+    rating: 4.5, reviewCount: 3870, stock: 18,
+    categories: [categories[6]], isFeatured: false,
+  },
+
+  // ── Children ──────────────────────────────────────────────────────────────
+  {
+    id: 'book-33', title: 'The Little Prince', author: 'Antoine de Saint-Exupéry',
+    publisher: publishers[0], price: 299, discountPct: 10,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg',
+    description: 'A poetic tale in which a pilot stranded in the desert meets a young prince who has fallen to Earth from a tiny asteroid.',
+    isbn: '9780156012195', pages: 96, language: 'English',
+    rating: 4.8, reviewCount: 13400, stock: 30,
+    categories: [categories[7], categories[0]], isFeatured: true,
+  },
+  {
+    id: 'book-34', title: 'Charlotte\'s Web', author: 'E. B. White',
+    publisher: publishers[1], price: 349, discountPct: 12,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780064400558-L.jpg',
+    description: 'The story of a pig named Wilbur and his friendship with a barn spider named Charlotte, a classic tale of friendship and loss.',
+    isbn: '9780064400558', pages: 184, language: 'English',
+    rating: 4.7, reviewCount: 8760, stock: 20,
+    categories: [categories[7]], isFeatured: false,
+  },
+  {
+    id: 'book-35', title: 'Harry Potter and the Philosopher\'s Stone', author: 'J. K. Rowling',
+    publisher: publishers[2], price: 549, discountPct: 18,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781408855652-L.jpg',
+    description: 'A young boy discovers he is a wizard and begins his education at Hogwarts School of Witchcraft and Wizardry.',
+    isbn: '9781408855652', pages: 352, language: 'English',
+    rating: 4.9, reviewCount: 22100, stock: 35,
+    categories: [categories[7], categories[0]], isFeatured: true,
+  },
+  {
+    id: 'book-36', title: 'The Jungle Book', author: 'Rudyard Kipling',
+    publisher: publishers[4], price: 249, discountPct: 0,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780141325293-L.jpg',
+    description: 'A collection of stories set in India about Mowgli, a boy raised by wolves, and his adventures in the jungle.',
+    isbn: '9780141325293', pages: 256, language: 'English',
+    rating: 4.4, reviewCount: 4200, stock: 16,
+    categories: [categories[7]], isFeatured: false,
+  },
+  {
+    id: 'book-37', title: 'Ikigai: The Japanese Secret to a Long and Happy Life', author: 'Héctor García & Francesc Miralles',
+    publisher: publishers[1], price: 499, discountPct: 20,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780143130727-L.jpg',
+    description: 'Brings to the West the Japanese concept of ikigai, which translates to "the happiness of always being busy" and may be the secret to long life.',
+    isbn: '9780143130727', pages: 208, language: 'English',
+    rating: 4.3, reviewCount: 7180, stock: 22,
+    categories: [categories[5]], isFeatured: false,
+  },
+  {
+    id: 'book-38', title: 'Zero to One', author: 'Peter Thiel & Blake Masters',
+    publisher: publishers[2], price: 799, discountPct: 22,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780804139021-L.jpg',
+    description: 'Notes on startups, or how to build the future. Thiel argues that doing what we already know takes the world from 1 to n, but every new creation goes from 0 to 1.',
+    isbn: '9780804139021', pages: 224, language: 'English',
+    rating: 4.5, reviewCount: 6340, stock: 17,
+    categories: [categories[3], categories[1]], isFeatured: true,
+  },
+  {
+    id: 'book-39', title: 'Homo Deus: A Brief History of Tomorrow', author: 'Yuval Noah Harari',
+    publisher: publishers[1], price: 849, discountPct: 22,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9780062464316-L.jpg',
+    description: 'Examines what might happen to the world when old myths are coupled with new godlike technologies such as artificial intelligence and genetic engineering.',
+    isbn: '9780062464316', pages: 464, language: 'English',
+    rating: 4.4, reviewCount: 5020, stock: 10,
+    categories: [categories[1], categories[2]], isFeatured: false,
+  },
+  {
+    id: 'book-40', title: 'The Art of War', author: 'Sun Tzu',
+    publisher: publishers[4], price: 249, discountPct: 0,
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/9781590302255-L.jpg',
+    description: 'An ancient Chinese military treatise dating from the 5th century BC, attributed to Sun Tzu, whose influence extends into business and management.',
+    isbn: '9781590302255', pages: 288, language: 'English',
+    rating: 4.6, reviewCount: 8910, stock: 28,
+    categories: [categories[4], categories[1]], isFeatured: false,
   },
 ];
 
@@ -188,7 +493,7 @@ app.get('/api/books', (req, res) => {
   if (sort === 'price_asc') result.sort((a, b) => a.price - b.price);
   else if (sort === 'price_desc') result.sort((a, b) => b.price - a.price);
   else if (sort === 'rating') result.sort((a, b) => b.rating - a.rating);
-  res.json({ books: result, total: result.length });
+  res.json({ data: result, total: result.length, page: 1, limit: result.length, totalPages: 1 });
 });
 
 app.get('/api/books/:id', (req, res) => {
@@ -300,8 +605,11 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Da
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`✅ Bookstore API running at http://127.0.0.1:${PORT}`);
-});
+// Only bind the port when run directly (not during tests)
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '127.0.0.1', () => {
+    console.log(`✅ Bookstore API running at http://127.0.0.1:${PORT}`);
+  });
+}
 
 export default app;

@@ -8,30 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/authStore';
-import type { User } from '@/types';
+import { authService } from '@/services/authService';
 
 const loginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 type LoginForm = z.infer<typeof loginSchema>;
-
-// Mock login — replaced by real API in Prompt 14
-async function mockLogin(email: string, _password: string): Promise<{ user: User; token: string }> {
-  await new Promise((r) => setTimeout(r, 800));
-  if (email === 'error@test.com') throw new Error('Invalid credentials');
-  return {
-    token: 'mock-jwt-token-' + Date.now(),
-    user: {
-      id: 'user-1',
-      email,
-      name: email.split('@')[0].replace(/[^a-z]/gi, ' ').trim() || 'BookVault User',
-      role: 'customer',
-      giftPoints: 250,
-      createdAt: new Date().toISOString(),
-    },
-  };
-}
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,11 +35,12 @@ export default function Login() {
   const onSubmit = async (data: LoginForm) => {
     setServerError('');
     try {
-      const { user, token } = await mockLogin(data.email, data.password);
+      const { user, token } = await authService.login(data);
       setAuth(user, token);
       navigate(redirect, { replace: true });
-    } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Login failed. Please try again.');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setServerError(msg ?? (err instanceof Error ? err.message : 'Login failed. Please try again.'));
     }
   };
 
@@ -141,11 +125,6 @@ export default function Login() {
           </Link>
         </p>
 
-        {/* Demo hint */}
-        <div className="mt-4 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground text-center">
-          Demo: use any email + password (min 6 chars).<br />
-          Use <code>error@test.com</code> to test error state.
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Star,
@@ -10,15 +10,17 @@ import {
   Shield,
   RotateCcw,
   ChevronRight,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import BookGrid from '@/components/books/BookGrid';
 import EmptyState from '@/components/common/EmptyState';
-import { mockBooks } from '@/utils/mockData';
+import { bookService } from '@/services/bookService';
 import { formatPrice, discountedPrice } from '@/utils';
 import { useCartStore } from '@/store/cartStore';
+import type { Book } from '@/types';
 
 // ─── Star Rating ──────────────────────────────────────────────────────────────
 function StarRating({ rating, count }: { rating: number; count: number }) {
@@ -55,10 +57,36 @@ export default function ProductDetail() {
   const addItem = useCartStore((s) => s.addItem);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [book, setBook] = useState<Book | null>(null);
+  const [relatedBooks, setRelatedBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  const book = mockBooks.find((b) => b.id === id);
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setNotFound(false);
+    bookService.getBook(id)
+      .then((b) => {
+        setBook(b);
+        return bookService.getRecommendations(id);
+      })
+      .then(setRelatedBooks)
+      .catch((err: { response?: { status?: number } }) => {
+        if (err?.response?.status === 404) setNotFound(true);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  if (!book) {
+  if (loading) {
+    return (
+      <div className="container py-16 flex justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (notFound || !book) {
     return (
       <div className="container py-16">
         <EmptyState
@@ -76,11 +104,6 @@ export default function ProductDetail() {
 
   const finalPrice = discountedPrice(book.price, book.discountPct);
   const savings = book.price - finalPrice;
-  const relatedBooks = mockBooks.filter(
-    (b) =>
-      b.id !== book.id &&
-      b.categories.some((c) => book.categories.some((bc) => bc.id === c.id))
-  );
 
   const handleAddToCart = () => {
     addItem(book, quantity);

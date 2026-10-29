@@ -16,7 +16,7 @@ const columnClasses = {
 };
 
 export default function BookGrid({
-  books,
+  books = [],
   loading = false,
   skeletonCount = 8,
   columns = 4,

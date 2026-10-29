@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { SlidersHorizontal, X, ChevronDown } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -14,8 +14,9 @@ import {
 import { Separator } from '@/components/ui/separator';
 import BookGrid from '@/components/books/BookGrid';
 import EmptyState from '@/components/common/EmptyState';
-import { mockBooks, mockCategories, mockPublishers } from '@/utils/mockData';
-import { discountedPrice } from '@/utils';
+import { bookService } from '@/services/bookService';
+import { mockCategories, mockPublishers } from '@/utils/mockData';
+import type { Book } from '@/types';
 
 type SortKey = 'relevance' | 'price-asc' | 'price-desc' | 'rating' | 'newest' | 'bestseller';
 
@@ -160,7 +161,7 @@ function FilterSidebar({
 // ─── Catalogue Page ────────────────────────────────────────────────────────────
 export default function Catalogue() {
   const { category: categoryParam } = useParams<{ category: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [selectedCategory, setSelectedCategory] = useState(
     categoryParam ?? searchParams.get('category') ?? ''
@@ -171,8 +172,12 @@ export default function Catalogue() {
   const [sort, setSort] = useState<SortKey>(
     (searchParams.get('sort') as SortKey) ?? 'relevance'
   );
-  const [search, setSearch] = useState(searchParams.get('search') ?? '');
+  const [search] = useState(searchParams.get('search') ?? '');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [books, setBooks] = useState<Book[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const clearFilters = () => {
     setSelectedCategory('');
@@ -183,61 +188,25 @@ export default function Catalogue() {
 
   const activeFilterCount = [selectedCategory, selectedBrand, minPrice, maxPrice].filter(Boolean).length;
 
-  // Filter + sort books (client-side using mock data)
-  const filteredBooks = useMemo(() => {
-    let books = [...mockBooks];
-
-    if (search) {
-      const q = search.toLowerCase();
-      books = books.filter(
-        (b) =>
-          b.title.toLowerCase().includes(q) ||
-          b.author.toLowerCase().includes(q) ||
-          b.isbn.includes(q)
-      );
-    }
-
-    if (selectedCategory) {
-      books = books.filter((b) =>
-        b.categories.some((c) => c.slug === selectedCategory)
-      );
-    }
-
-    if (selectedBrand) {
-      books = books.filter((b) => b.publisher.id === selectedBrand);
-    }
-
-    if (minPrice) {
-      books = books.filter(
-        (b) => discountedPrice(b.price, b.discountPct) >= Number(minPrice)
-      );
-    }
-
-    if (maxPrice) {
-      books = books.filter(
-        (b) => discountedPrice(b.price, b.discountPct) <= Number(maxPrice)
-      );
-    }
-
-    switch (sort) {
-      case 'price-asc':
-        books.sort((a, b) => discountedPrice(a.price, a.discountPct) - discountedPrice(b.price, b.discountPct));
-        break;
-      case 'price-desc':
-        books.sort((a, b) => discountedPrice(b.price, b.discountPct) - discountedPrice(a.price, a.discountPct));
-        break;
-      case 'rating':
-        books.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'bestseller':
-        books.sort((a, b) => b.reviewCount - a.reviewCount);
-        break;
-      default:
-        break;
-    }
-
-    return books;
+  const fetchBooks = useCallback(() => {
+    setLoading(true);
+    bookService.getBooks({
+      search: search || undefined,
+      category: selectedCategory || undefined,
+      brand: selectedBrand || undefined,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      sort: sort === 'relevance' ? undefined : sort,
+      limit: 48,
+    })
+      .then((res) => { setBooks(res.data); setTotal(res.total); })
+      .catch(() => { setBooks([]); setTotal(0); })
+      .finally(() => setLoading(false));
   }, [search, selectedCategory, selectedBrand, minPrice, maxPrice, sort]);
+
+  useEffect(() => { fetchBooks(); }, [fetchBooks]);
+
+  const filteredBooks = books;
 
   return (
     <div className="container py-8">
@@ -251,7 +220,7 @@ export default function Catalogue() {
             : 'All Books'}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {filteredBooks.length} book{filteredBooks.length !== 1 ? 's' : ''} found
+          {loading ? 'Searching…' : `${total} book${total !== 1 ? 's' : ''} found`}
         </p>
       </div>
 
@@ -343,7 +312,9 @@ export default function Catalogue() {
           )}
 
           {/* Books */}
-          {filteredBooks.length === 0 ? (
+          {loading ? (
+            <BookGrid books={[]} columns={4} loading={true} />
+          ) : filteredBooks.length === 0 ? (
             <EmptyState
               title="No books found"
               description="Try adjusting your filters or search query."

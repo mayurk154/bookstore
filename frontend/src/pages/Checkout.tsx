@@ -17,7 +17,8 @@ import {
 } from '@/components/ui/select';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
-import { formatPrice, maxRedeemablePoints, generateRef } from '@/utils';
+import { formatPrice, maxRedeemablePoints } from '@/utils';
+import { orderService } from '@/services/orderService';
 import type { PaymentMethod } from '@/types';
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
@@ -117,7 +118,7 @@ function OrderSummaryPanel({
 export default function Checkout() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { items, subtotal, total, giftPointsApplied, applyGiftPoints, removeGiftPoints, clearCart } = useCartStore();
+  const { items, subtotal, applyGiftPoints, removeGiftPoints, clearCart } = useCartStore();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
@@ -153,10 +154,31 @@ export default function Checkout() {
 
   const handlePlaceOrder = async () => {
     setIsPlacing(true);
-    await new Promise((r) => setTimeout(r, 1200));
-    const orderId = generateRef('ORD');
-    clearCart();
-    navigate(`/order-confirmation/${orderId}`);
+    try {
+      const addr = getValues();
+      // 1. Save the address first
+      const savedAddress = await orderService.addAddress({
+        label: addr.label,
+        street: addr.street,
+        city: addr.city,
+        state: addr.state,
+        pincode: addr.pincode,
+        isDefault: false,
+      });
+      // 2. Place the order
+      const order = await orderService.createOrder({
+        addressId: savedAddress.id,
+        paymentMethod,
+        giftPointsToUse: gpApplied,
+      });
+      clearCart();
+      navigate(`/order-confirmation/${order.id}`);
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      alert(msg ?? 'Failed to place order. Please try again.');
+    } finally {
+      setIsPlacing(false);
+    }
   };
 
   if (items.length === 0) {
