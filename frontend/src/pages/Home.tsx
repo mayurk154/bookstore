@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpen, Truck, Shield, Gift, Search } from 'lucide-react';
+import {
+  ArrowRight, BookOpen, Truck, Shield, Gift, Search,
+  Feather, Compass, FlaskConical, Cpu, Landmark, Sprout, UserRound, Shapes,
+  type LucideIcon,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WaveDivider from '@/components/common/WaveDivider';
@@ -141,41 +145,83 @@ function TrustBadges() {
 }
 
 // ─── Category Grid ─────────────────────────────────────────────────────────────
-const categoryColors = [
-  'text-sky-700',
-  'text-teal-700',
-  'text-cyan-700',
-  'text-amber-700',
-  'text-blue-700',
-  'text-emerald-700',
-  'text-orange-700',
-  'text-rose-700',
-];
+const categoryStyles: Record<string, { icon: LucideIcon; tagline: string; hue: number }> = {
+  fiction:       { icon: Feather,      tagline: 'Stories to get lost in', hue: 199 },
+  'non-fiction': { icon: Compass,      tagline: 'Real worlds, real ideas', hue: 186 },
+  science:       { icon: FlaskConical, tagline: 'Curiosity, explained',    hue: 172 },
+  technology:    { icon: Cpu,          tagline: 'Code, craft & future',    hue: 210 },
+  history:       { icon: Landmark,     tagline: 'Tides of the past',       hue: 36 },
+  'self-help':   { icon: Sprout,       tagline: 'Grow a little each day',  hue: 160 },
+  biography:     { icon: UserRound,    tagline: 'Lives worth reading',     hue: 24 },
+  children:      { icon: Shapes,       tagline: 'Little readers, big joy', hue: 12 },
+};
 
 function CategoryGrid() {
   return (
     <section className="container py-12">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Browse by Category</h2>
+        <div>
+          <h2 className="text-2xl font-bold">Browse by Category</h2>
+          <p className="text-sm text-muted-foreground mt-1">Dive into a shelf that suits your mood</p>
+        </div>
         <Button variant="ghost" asChild>
           <Link to="/catalogue" className="flex items-center gap-1 text-sm">
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-        {mockCategories.map((cat, i) => (
-          <Link
-            key={cat.id}
-            to={`/catalogue/${cat.slug}`}
-            className={`rounded-2xl p-4 text-center text-sm font-medium cursor-pointer neu-raised neu-hover ${categoryColors[i % categoryColors.length]}`}
-          >
-            <div className="text-2xl mb-1">
-              {['📚', '📖', '🔬', '💻', '🏛️', '🌱', '👤', '🧒'][i % 8]}
-            </div>
-            {cat.name}
-          </Link>
-        ))}
+      <div className="grid grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-4 gap-5">
+        {mockCategories.map((cat) => {
+          const style = categoryStyles[cat.slug] ?? categoryStyles.fiction;
+          const Icon = style.icon;
+          const { hue } = style;
+          return (
+            <Link
+              key={cat.id}
+              to={`/catalogue/${cat.slug}`}
+              className="group relative overflow-hidden rounded-3xl neu-raised neu-hover p-5 min-h-[132px] flex flex-col justify-between"
+              style={{
+                backgroundImage: `linear-gradient(145deg, hsl(${hue} 70% 96%) 0%, hsl(${hue} 60% 90% / 0.85) 100%)`,
+              }}
+            >
+              {/* Faded watermark icon, like a shell pressed into sand */}
+              <Icon
+                aria-hidden
+                strokeWidth={1.25}
+                className="absolute -right-5 -bottom-6 h-28 w-28 rotate-12 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110"
+                style={{ color: `hsl(${hue} 55% 55% / 0.16)` }}
+              />
+              {/* Soft wave crest along the bottom edge */}
+              <svg
+                aria-hidden
+                viewBox="0 0 200 20"
+                preserveAspectRatio="none"
+                className="absolute inset-x-0 bottom-0 h-3 w-full"
+              >
+                <path d="M0,10 C25,0 50,20 75,10 C100,0 125,20 150,10 C175,0 190,14 200,10 L200,20 L0,20 Z" fill={`hsl(${hue} 70% 80% / 0.55)`} />
+              </svg>
+
+              {/* Icon porthole */}
+              <div
+                className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full neu-inset"
+                style={{ color: `hsl(${hue} 65% 34%)` }}
+              >
+                <Icon className="h-5 w-5" strokeWidth={1.75} />
+              </div>
+
+              <div className="relative z-10 mt-4">
+                <div className="flex items-center gap-1">
+                  <h3 className="font-semibold text-base" style={{ color: `hsl(${hue} 55% 22%)` }}>{cat.name}</h3>
+                  <ArrowRight
+                    className="h-4 w-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                    style={{ color: `hsl(${hue} 65% 34%)` }}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">{style.tagline}</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
