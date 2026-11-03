@@ -8,10 +8,10 @@ const Badge = React.forwardRef<
   }
 >(({ className, variant = 'default', ...props }, ref) => {
   const variantClasses = {
-    default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+    default: 'bg-gradient-to-br from-sky-400 to-primary text-primary-foreground shadow-[2px_2px_5px_hsl(var(--neu-dark)/0.7)]',
     secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
     destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/80',
-    outline: 'text-foreground border border-input',
+    outline: 'text-foreground bg-card neu-raised-sm',
   };
   return (
     <span

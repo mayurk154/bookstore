@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, Truck, Shield, Gift, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import WaveDivider from '@/components/common/WaveDivider';
 import BookGrid from '@/components/books/BookGrid';
 import { bookService } from '@/services/bookService';
 import { mockCategories } from '@/utils/mockData';
@@ -12,6 +13,16 @@ import type { Book } from '@/types';
 function Hero() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  const [covers, setCovers] = useState<Book[]>([]);
+
+  useEffect(() => {
+    bookService.getBooks({ limit: 40 })
+      .then((res) => {
+        const shuffled = [...res.data].sort(() => Math.random() - 0.5);
+        setCovers(shuffled.slice(0, 6));
+      })
+      .catch(() => {/* hero simply renders without covers */});
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,18 +32,22 @@ function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background py-16 md:py-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-sky-200/70 via-sky-100/50 to-transparent pt-16 pb-28 md:pt-24 md:pb-36">
       {/* Background decorative elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden>
         <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute -bottom-1/4 -left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-3xl" />
       </div>
 
+      <span className="float-bob absolute top-10 right-[8%] text-3xl opacity-70 hidden md:block" aria-hidden>🐚</span>
+      <span className="float-bob absolute bottom-32 left-[5%] text-2xl opacity-60 hidden md:block" style={{ animationDelay: '1.5s' }} aria-hidden>⭐</span>
+      <WaveDivider className="absolute bottom-0 left-0 right-0" />
+
       <div className="container">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Text */}
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm text-primary font-medium">
+            <div className="inline-flex items-center gap-2 rounded-full neu-raised-sm px-4 py-1.5 text-sm text-primary font-medium">
               <BookOpen className="h-4 w-4" />
               Over 50,000 books in stock
             </div>
@@ -71,15 +86,21 @@ function Hero() {
             </div>
           </div>
 
-          {/* Featured cover grid — category tiles */}
-          <div className="hidden md:grid grid-cols-3 gap-3 rotate-2">
-            {mockCategories.slice(0, 6).map((cat, i) => (
+          {/* Cover grid — random books */}
+          <div className="hidden md:grid grid-cols-3 gap-4 rotate-2">
+            {covers.map((book, i) => (
               <Link
-                key={cat.id}
-                to={`/catalogue/${cat.slug}`}
-                className={`rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow ${i === 1 || i === 4 ? '-mt-4' : ''} bg-primary/10 aspect-[3/4] flex items-center justify-center`}
+                key={book.id}
+                to={`/books/${book.id}`}
+                title={book.title}
+                className={`rounded-2xl neu-raised neu-hover p-2 ${i === 1 || i === 4 ? '-mt-4' : ''}`}
               >
-                <span className="text-4xl">{['📚','📖','🔬','💻','🏛️','🌱'][i]}</span>
+                <img
+                  src={book.coverUrl}
+                  alt={`Cover of ${book.title}`}
+                  className="aspect-[3/4] w-full rounded-xl object-cover bg-muted"
+                  loading="lazy"
+                />
               </Link>
             ))}
           </div>
@@ -99,12 +120,12 @@ const trustItems = [
 
 function TrustBadges() {
   return (
-    <section className="border-y bg-muted/30 py-6">
+    <section className="py-6">
       <div className="container">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {trustItems.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex items-center gap-3">
-              <div className="rounded-full bg-primary/10 p-2.5 text-primary flex-shrink-0">
+              <div className="rounded-full neu-raised-sm p-2.5 text-primary flex-shrink-0">
                 <Icon className="h-5 w-5" />
               </div>
               <div>
@@ -121,14 +142,14 @@ function TrustBadges() {
 
 // ─── Category Grid ─────────────────────────────────────────────────────────────
 const categoryColors = [
-  'bg-blue-50 hover:bg-blue-100 text-blue-700',
-  'bg-green-50 hover:bg-green-100 text-green-700',
-  'bg-purple-50 hover:bg-purple-100 text-purple-700',
-  'bg-orange-50 hover:bg-orange-100 text-orange-700',
-  'bg-pink-50 hover:bg-pink-100 text-pink-700',
-  'bg-teal-50 hover:bg-teal-100 text-teal-700',
-  'bg-yellow-50 hover:bg-yellow-100 text-yellow-700',
-  'bg-red-50 hover:bg-red-100 text-red-700',
+  'text-sky-700',
+  'text-teal-700',
+  'text-cyan-700',
+  'text-amber-700',
+  'text-blue-700',
+  'text-emerald-700',
+  'text-orange-700',
+  'text-rose-700',
 ];
 
 function CategoryGrid() {
@@ -147,7 +168,7 @@ function CategoryGrid() {
           <Link
             key={cat.id}
             to={`/catalogue/${cat.slug}`}
-            className={`rounded-xl p-4 text-center text-sm font-medium transition-colors cursor-pointer ${categoryColors[i % categoryColors.length]}`}
+            className={`rounded-2xl p-4 text-center text-sm font-medium cursor-pointer neu-raised neu-hover ${categoryColors[i % categoryColors.length]}`}
           >
             <div className="text-2xl mb-1">
               {['📚', '📖', '🔬', '💻', '🏛️', '🌱', '👤', '🧒'][i % 8]}

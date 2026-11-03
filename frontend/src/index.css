@@ -4,48 +4,59 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
-    --radius: 0.5rem;
+    /* Sea & sand palette — light sky blue + greyish white */
+    --background: 205 38% 93%;
+    --foreground: 212 45% 18%;
+    --card: 205 40% 94.5%;
+    --card-foreground: 212 45% 18%;
+    --popover: 205 40% 96%;
+    --popover-foreground: 212 45% 18%;
+    --primary: 199 78% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 200 45% 88%;
+    --secondary-foreground: 212 45% 22%;
+    --muted: 205 32% 90%;
+    --muted-foreground: 209 24% 38%;
+    --accent: 38 55% 86%; /* sand */
+    --accent-foreground: 28 45% 22%;
+    --destructive: 4 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 205 30% 85%;
+    --input: 205 30% 85%;
+    --ring: 199 78% 42%;
+    --radius: 1rem;
+
+    /* Neumorphism shadow colours */
+    --neu-dark: 207 32% 76%;
+    --neu-light: 0 0% 100%;
+    --sand: 38 55% 84%;
+    --shell: 14 70% 88%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --background: 212 35% 14%;
+    --foreground: 205 40% 94%;
+    --card: 212 35% 16%;
+    --card-foreground: 205 40% 94%;
+    --popover: 212 35% 16%;
+    --popover-foreground: 205 40% 94%;
+    --primary: 197 80% 58%;
+    --primary-foreground: 212 45% 10%;
+    --secondary: 212 30% 22%;
+    --secondary-foreground: 205 40% 94%;
+    --muted: 212 30% 20%;
+    --muted-foreground: 205 20% 70%;
+    --accent: 35 30% 28%;
+    --accent-foreground: 38 55% 90%;
+    --destructive: 4 65% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 212 30% 24%;
+    --input: 212 30% 24%;
+    --ring: 197 80% 58%;
+    --neu-dark: 212 40% 9%;
+    --neu-light: 212 30% 22%;
+    --sand: 35 30% 28%;
+    --shell: 14 30% 30%;
   }
 }
 
@@ -55,6 +66,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(1200px 500px at 10% -10%, hsl(199 85% 88% / 0.7), transparent 60%),
+      radial-gradient(900px 400px at 100% 0%, hsl(190 70% 90% / 0.6), transparent 60%);
+    background-attachment: fixed;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -72,4 +87,57 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/50;
+}
+
+
+/* ─── Neumorphism utilities ─────────────────────────────────────────────── */
+@layer components {
+  .neu-raised {
+    background: hsl(var(--card));
+    box-shadow: 8px 8px 18px hsl(var(--neu-dark) / 0.75), -8px -8px 18px hsl(var(--neu-light) / 0.95);
+  }
+  .neu-raised-sm {
+    background: hsl(var(--card));
+    box-shadow: 4px 4px 9px hsl(var(--neu-dark) / 0.75), -4px -4px 9px hsl(var(--neu-light) / 0.95);
+  }
+  .neu-inset {
+    background: hsl(var(--background));
+    box-shadow: inset 4px 4px 8px hsl(var(--neu-dark) / 0.7), inset -4px -4px 8px hsl(var(--neu-light) / 0.95);
+  }
+  .neu-pressed {
+    box-shadow: inset 3px 3px 7px hsl(var(--neu-dark) / 0.8), inset -3px -3px 7px hsl(var(--neu-light) / 0.9);
+  }
+  .neu-hover {
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .neu-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 12px 12px 24px hsl(var(--neu-dark) / 0.8), -12px -12px 24px hsl(var(--neu-light) / 1);
+  }
+  .sand-surface {
+    background: linear-gradient(145deg, hsl(var(--sand) / 0.9), hsl(var(--sand) / 0.55));
+    box-shadow: 6px 6px 14px hsl(var(--neu-dark) / 0.6), -6px -6px 14px hsl(var(--neu-light) / 0.9);
+  }
+}
+
+/* ─── Ocean waves ───────────────────────────────────────────────────────── */
+@keyframes wave-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--rot, 0deg)); }
+}
+.wave-track {
+  display: flex;
+  width: 200%;
+  animation: wave-drift 18s linear infinite;
+}
+.wave-track.slow { animation-duration: 28s; }
+.wave-track.reverse { animation-direction: reverse; }
+.float-bob { animation: float-bob 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-track, .float-bob { animation: none; }
 }

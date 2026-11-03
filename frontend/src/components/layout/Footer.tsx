@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { BookOpen, Github, Twitter, Instagram } from 'lucide-react';
+import WaveDivider from '@/components/common/WaveDivider';
 
 const footerLinks = {
   Explore: [
@@ -24,7 +25,8 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/40">
+    <footer className="relative mt-8 bg-gradient-to-b from-[hsl(var(--sand)/0.55)] to-[hsl(var(--sand)/0.9)]">
+      <WaveDivider fill="hsl(var(--sand) / 0.55)" className="absolute -top-px left-0 right-0 -translate-y-full" />
       <div className="container py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
